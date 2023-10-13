@@ -1,4 +1,4 @@
-const socket = io("ws://localhost:3000");
+const socket = io("ws://localhost:3500");
 
 function sendMessage(e) {
   e.preventDefault();
@@ -13,7 +13,7 @@ function sendMessage(e) {
 document.querySelector("form").addEventListener("submit", sendMessage);
 
 // Listen for messages
-socket.on("message", ({ data }) => {
+socket.on("message", ( data ) => {
   const li = document.createElement("li");
   li.textContent = data;
   document.querySelector("ul").appendChild(li);
