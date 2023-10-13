@@ -1,12 +1,21 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-const server = new ws.Server({ port: 3000 });
+const httpServer = createServer();
 
-server.on("connection", (socket) => {
-  socket.on("message", (message) => {
-    const b = Buffer.from(message);
-    console.log(b.toString());
-    socket.send(`${message}`);
+const io = new Server(httpServer, {
+  cors: {
+    origin:
+      process.env.NODE_ENV === "production"
+        ? false
+        : ["http://localhost:5500", "http://127.0.0.1:5500"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User ${socket.id} connected`);
+  socket.on("message", (data) => {
+    console.log(data);
+    socket.emit("message", `${socket.id.substring(0, 5)}: ${data}``${message}`);
   });
 });
