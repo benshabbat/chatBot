@@ -32,7 +32,7 @@ io.on("connection", (socket) => {
   // Upon connection - to all others
   socket.broadcast.emit(
     "message",
-    `User ${socket.id.substring(0, 5)}} connected`
+    `User ${socket.id.substring(0, 5)} connected`
   );
 
   // Listening for a message event
@@ -45,7 +45,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     socket.broadcast.emit(
       "message",
-      `User ${socket.id.substring(0, 5)}} disconnected`
+      `User ${socket.id.substring(0, 5)} disconnected`
     );
   });
 
@@ -53,4 +53,5 @@ io.on("connection", (socket) => {
   socket.on("activity", (name) => {
     socket.broadcast.emit("activity", name);
   });
+  
 });

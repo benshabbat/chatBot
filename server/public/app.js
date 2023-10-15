@@ -7,6 +7,7 @@ function sendMessage(e) {
   if (msgInput.value) {
     socket.emit("message", msgInput.value);
     msgInput.value = "";
+    
   }
   msgInput.focus();
 }
@@ -28,4 +29,9 @@ let activityTimer;
 socket.on("activity", (name) => {
   activity.textContent = `${name} is typing...`;
 
+  // Clear after 3 seconds
+  clearTimeout(activityTimer);
+  activityTimer = setTimeout(() => {
+    activity.textContent = "";
+  }, 3000);
 });
