@@ -1,6 +1,11 @@
 const socket = io("ws://localhost:3500");
+const msgInput = document.getElementById("message");
+const nameInput = document.getElementById("name");
+const chatRoom = document.getElementById("room");
 const activity = document.querySelector(".activity");
-const msgInput = document.querySelector("input");
+const userList = document.querySelector(".user-list");
+const roomList = document.querySelector(".room-list");
+const chatDisplay = document.querySelector(".chat-display");
 
 function sendMessage(e) {
   e.preventDefault();
