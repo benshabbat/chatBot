@@ -9,12 +9,24 @@ const chatDisplay = document.querySelector(".chat-display");
 
 function sendMessage(e) {
   e.preventDefault();
-  if (msgInput.value) {
-    socket.emit("message", msgInput.value);
+  if (msgInput.value && chatRoom.value && nameInput.value) {
+    socket.emit("message", {
+      text: msgInput.value,
+      name: nameInput.value,
+    });
     msgInput.value = "";
-    
   }
   msgInput.focus();
+}
+function enterRoom(e){
+  e.preventDefault();
+  if(chatRoom.value && nameInput.value){
+    socket.emit("enterRoom", {
+      name: nameInput.value,
+      room: chatRoom.value
+    });
+  }
+
 }
 
 document.querySelector("form").addEventListener("submit", sendMessage);
