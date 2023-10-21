@@ -29,7 +29,8 @@ function enterRoom(e){
 
 }
 
-document.querySelector("form").addEventListener("submit", sendMessage);
+document.querySelector(".form-join").addEventListener("submit", sendMessage);
+document.querySelector(".form-msg").addEventListener("submit", enterRoom);
 
 // Listen for messages
 socket.on("message", (data) => {
