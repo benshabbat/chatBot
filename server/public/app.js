@@ -18,29 +18,28 @@ function sendMessage(e) {
   }
   msgInput.focus();
 }
-function enterRoom(e){
+function enterRoom(e) {
   e.preventDefault();
-  if(chatRoom.value && nameInput.value){
+  if (chatRoom.value && nameInput.value) {
     socket.emit("enterRoom", {
       name: nameInput.value,
-      room: chatRoom.value
+      room: chatRoom.value,
     });
   }
-
 }
 
 document.querySelector(".form-join").addEventListener("submit", sendMessage);
 document.querySelector(".form-msg").addEventListener("submit", enterRoom);
+
+msgInput.addEventListener("keypress", () => {
+  socket.emit("activity", nameInput.value);
+});
 
 // Listen for messages
 socket.on("message", (data) => {
   const li = document.createElement("li");
   li.textContent = data;
   document.querySelector("ul").appendChild(li);
-});
-
-msgInput.addEventListener("keypress", () => {
-  socket.emit("activity", socket.id.substring(0, 5));
 });
 
 let activityTimer;
