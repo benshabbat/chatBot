@@ -76,3 +76,14 @@ function buildMsg(name, text) {
     }).format(new Date()),
   };
 }
+
+//user functions 
+
+function activateUser(id, name, room) {
+  const user = { id, name, room }
+  UsersState.setUsers([
+      ...UsersState.users.filter(user => user.id !== id),
+      user
+  ])
+  return user
+}
