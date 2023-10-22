@@ -17,12 +17,12 @@ const expressServer = app.listen(PORT, () =>
 
 //state
 
-const UsersState ={
-  users:[],
-  setUser: function(newUsersArray){
+const UsersState = {
+  users: [],
+  setUser: function (newUsersArray) {
     this.users = newUsersArray;
-  }
-}
+  },
+};
 
 const io = new Server(expressServer, {
   cors: {
@@ -63,5 +63,16 @@ io.on("connection", (socket) => {
   socket.on("activity", (name) => {
     socket.broadcast.emit("activity", name);
   });
-  
 });
+
+function buildMsg(name, text) {
+  return {
+    name,
+    text,
+    time: new Intl.DateTimeFormat("default", {
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    }).format(new Date()),
+  };
+}
