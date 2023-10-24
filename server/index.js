@@ -60,6 +60,9 @@ io.on("connection", (socket) => {
 
     //join the room
     socket.join(room);
+
+     // To user who joined 
+     socket.emit('message', buildMsg(ADMIN, `You have joined the ${user.room} chat room`))
   });
 
   // Upon connection - to all others
