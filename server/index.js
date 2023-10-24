@@ -39,9 +39,17 @@ io.on("connection", (socket) => {
   // Upon connection - only to user
   socket.emit("message", buildMsg(ADMIN, "Welcome to Chat App!"));
 
-  socket.on("enterRoom",({name,room}) => {})
-
-
+  socket.on("enterRoom", ({ name, room }) => {
+    // leave previous room
+    const previousRoom = getUser(socket.id)?.room;
+    if (prevRoom) {
+      socket.leave(prevRoom);
+      io.to(prevRoom).emit(
+        "message",
+        buildMsg(ADMIN, `${name} has left the room`)
+      );
+    }
+  });
 
   // Upon connection - to all others
   socket.broadcast.emit(
