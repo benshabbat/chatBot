@@ -49,6 +49,17 @@ io.on("connection", (socket) => {
         buildMsg(ADMIN, `${name} has left the room`)
       );
     }
+
+    const user = activateUser(socket.id, name, room);
+    // Cannot update previous room users list until after the state update in activate user
+    if (prevRoom) {
+      io.to(prevRoom).emit("userList", {
+        users: getUsersInRoom(prevRoom),
+      });
+    }
+
+    //join the room
+    socket.join(room);
   });
 
   // Upon connection - to all others
