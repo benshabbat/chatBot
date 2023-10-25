@@ -71,13 +71,12 @@ io.on("connection", (socket) => {
     socket.broadcast
       .to(user.room)
       .emit("message", buildMsg(ADMIN, `${user.name} has joined the room`));
-  });
 
-  // Upon connection - to all others
-  socket.broadcast.emit(
-    "message",
-    `User ${socket.id.substring(0, 5)} connected`
-  );
+    //update user list for room
+    io.to(user.room).emit("userList", {
+      users: getUsersInRoom(user.room),
+    });
+  });
 
   // Listening for a message event
   socket.on("message", (data) => {
