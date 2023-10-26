@@ -76,6 +76,11 @@ io.on("connection", (socket) => {
     io.to(user.room).emit("userList", {
       users: getUsersInRoom(user.room),
     });
+
+    // Update rooms list for everyone
+    io.emit("roomList", {
+      rooms: getAllActiveRooms(),
+    });
   });
 
   // Listening for a message event
