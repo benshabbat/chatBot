@@ -82,19 +82,32 @@ io.on("connection", (socket) => {
       rooms: getAllActiveRooms(),
     });
   });
+  // When user disconnects - to all others
+  socket.on("disconnect", () => {
+    const user = getUser(socket.id);
+    userLeavesApp(socket.id);
 
+    if (user) {
+      io.to(user.room).emit(
+        "message",
+        buildMsg(ADMIN, `${user.name} has left the room`)
+      );
+
+      io.to(user.room).emit("userList", {
+        users: getUsersInRoom(user.room),
+      });
+
+      io.emit("roomList", {
+        rooms: getAllActiveRooms(),
+      });
+    }
+
+    console.log(`User ${socket.id} disconnected`);
+  });
   // Listening for a message event
   socket.on("message", (data) => {
     console.log(data);
     io.emit("message", `${socket.id.substring(0, 5)}: ${data}`);
-  });
-
-  // When user disconnects - to all others
-  socket.on("disconnect", () => {
-    socket.broadcast.emit(
-      "message",
-      `User ${socket.id.substring(0, 5)} disconnected`
-    );
   });
 
   // Listen for activity
