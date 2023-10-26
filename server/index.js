@@ -104,10 +104,13 @@ io.on("connection", (socket) => {
 
     console.log(`User ${socket.id} disconnected`);
   });
+
   // Listening for a message event
-  socket.on("message", (data) => {
-    console.log(data);
-    io.emit("message", `${socket.id.substring(0, 5)}: ${data}`);
+  socket.on("message", ({ name, text }) => {
+    const room = getUser(socket.id)?.room;
+    if (room) {
+      io.to(room).emit("message", buildMsg(name, text));
+    }
   });
 
   // Listen for activity
