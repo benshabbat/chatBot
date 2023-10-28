@@ -70,3 +70,7 @@ socket.on("activity", (name) => {
     activity.textContent = "";
   }, 3000);
 });
+
+socket.on('userList', ({ users }) => {
+  showUsers(users)
+})
