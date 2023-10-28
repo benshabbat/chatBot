@@ -74,3 +74,7 @@ socket.on("activity", (name) => {
 socket.on('userList', ({ users }) => {
   showUsers(users)
 })
+
+socket.on('roomList', ({ rooms }) => {
+  showRooms(rooms)
+})
