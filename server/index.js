@@ -41,7 +41,8 @@ io.on("connection", (socket) => {
 
   socket.on("enterRoom", ({ name, room }) => {
     // leave previous room
-    const previousRoom = getUser(socket.id)?.room;
+    const prevRoom = getUser(socket.id)?.room;
+
     if (prevRoom) {
       socket.leave(prevRoom);
       io.to(prevRoom).emit(
@@ -51,6 +52,7 @@ io.on("connection", (socket) => {
     }
 
     const user = activateUser(socket.id, name, room);
+
     // Cannot update previous room users list until after the state update in activate user
     if (prevRoom) {
       io.to(prevRoom).emit("userList", {
@@ -58,8 +60,8 @@ io.on("connection", (socket) => {
       });
     }
 
-    //join the room
-    socket.join(room);
+    // join room
+    socket.join(user.room);
 
     // To user who joined
     socket.emit(
@@ -67,12 +69,12 @@ io.on("connection", (socket) => {
       buildMsg(ADMIN, `You have joined the ${user.room} chat room`)
     );
 
-    // To everyone else who joined
+    // To everyone else
     socket.broadcast
       .to(user.room)
       .emit("message", buildMsg(ADMIN, `${user.name} has joined the room`));
 
-    //update user list for room
+    // Update user list for room
     io.to(user.room).emit("userList", {
       users: getUsersInRoom(user.room),
     });
@@ -134,15 +136,14 @@ function buildMsg(name, text) {
   };
 }
 
-//user functions
-
+// User functions 
 function activateUser(id, name, room) {
-  const user = { id, name, room };
+  const user = { id, name, room }
   UsersState.setUsers([
-    ...UsersState.users.filter((user) => user.id !== id),
-    user,
-  ]);
-  return user;
+      ...UsersState.users.filter(user => user.id !== id),
+      user
+  ])
+  return user
 }
 
 function userLeavesApp(id) {
