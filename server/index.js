@@ -8,18 +8,19 @@ const __dirname = path.dirname(__filename);
 
 const PORT = process.env.PORT || 3500;
 const ADMIN = "Admin";
+
 const app = express();
+
 app.use(express.static(path.join(__dirname, "public")));
 
-const expressServer = app.listen(PORT, () =>
-  console.log(`listening on port ${PORT}`)
-);
+const expressServer = app.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
+});
 
-//state
-
+// state
 const UsersState = {
   users: [],
-  setUser: function (newUsersArray) {
+  setUsers: function (newUsersArray) {
     this.users = newUsersArray;
   },
 };
@@ -84,6 +85,7 @@ io.on("connection", (socket) => {
       rooms: getAllActiveRooms(),
     });
   });
+
   // When user disconnects - to all others
   socket.on("disconnect", () => {
     const user = getUser(socket.id);
@@ -136,14 +138,14 @@ function buildMsg(name, text) {
   };
 }
 
-// User functions 
+// User functions
 function activateUser(id, name, room) {
-  const user = { id, name, room }
+  const user = { id, name, room };
   UsersState.setUsers([
-      ...UsersState.users.filter(user => user.id !== id),
-      user
-  ])
-  return user
+    ...UsersState.users.filter((user) => user.id !== id),
+    user,
+  ]);
+  return user;
 }
 
 function userLeavesApp(id) {
